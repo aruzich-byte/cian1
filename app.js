@@ -83,6 +83,13 @@ function showToast(text) {
 }
 
 function navigate(path, { push = true } = {}) {
+  if (window.location.protocol === 'file:') {
+    const isInsideMapDirectory = /\/map\/(index\.html)?$/.test(window.location.pathname);
+    const prefix = isInsideMapDirectory ? '../' : './';
+    const target = path === '/map' ? `${prefix}map/` : `${prefix}index.html`;
+    window.location.href = new URL(target, window.location.href).href;
+    return;
+  }
   if (push) window.history.pushState({}, '', path);
   render();
 }
@@ -205,7 +212,7 @@ function bindApplicationEvents() {
 }
 
 function render() {
-  if (window.location.pathname === '/map') renderMap();
+  if (window.location.pathname === '/map' || window.location.pathname === '/map/' || /\/map\/(index\.html)?$/.test(window.location.pathname)) renderMap();
   else renderApplication();
 }
 

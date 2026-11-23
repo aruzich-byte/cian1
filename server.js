@@ -8,7 +8,7 @@ const contentTypes = { '.css': 'text/css; charset=utf-8', '.js': 'text/javascrip
 
 http.createServer((request, response) => {
   const pathname = new URL(request.url, `http://${request.headers.host}`).pathname;
-  const safePath = pathname === '/' || pathname === '/map' ? 'index.html' : pathname.slice(1);
+  const safePath = pathname === '/' || pathname === '/map' || pathname === '/map/' ? 'index.html' : pathname.slice(1);
   const filePath = path.resolve(root, safePath);
   if (!filePath.startsWith(root)) {
     response.writeHead(403).end('Forbidden');
