@@ -86,7 +86,7 @@ function navigate(path, { push = true } = {}) {
   if (window.location.protocol === 'file:') {
     const isInsideMapDirectory = /\/map\/(index\.html)?$/.test(window.location.pathname);
     const prefix = isInsideMapDirectory ? '../' : './';
-    const target = path === '/map' ? `${prefix}map/` : `${prefix}index.html`;
+    const target = path === '/map' ? `${prefix}map/index.html` : `${prefix}index.html`;
     window.location.href = new URL(target, window.location.href).href;
     return;
   }
@@ -184,7 +184,7 @@ function renderMap() {
 }
 
 function setActiveNav(path) {
-  document.querySelectorAll('[data-nav]').forEach((link) => link.classList.toggle('active', link.getAttribute('href') === path));
+  document.querySelectorAll('[data-nav]').forEach((link) => link.classList.toggle('active', link.dataset.route === path));
 }
 
 function bindApplicationEvents() {
@@ -220,7 +220,7 @@ document.addEventListener('click', (event) => {
   const link = event.target.closest('[data-nav]');
   if (!link) return;
   event.preventDefault();
-  navigate(link.getAttribute('href'));
+  navigate(link.dataset.route || link.getAttribute('href'));
 });
 window.addEventListener('popstate', render);
 render();
